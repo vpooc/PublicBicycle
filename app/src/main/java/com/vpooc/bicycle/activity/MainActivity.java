@@ -21,6 +21,7 @@ import com.baidu.mapapi.map.MapView;
 import com.vpooc.bicycle.Modle.LoginModle.ILoginModle;
 import com.vpooc.bicycle.Modle.LoginModle.Impl.LoginModle;
 import com.vpooc.bicycle.R;
+import com.vpooc.bicycle.app.Application;
 import com.vpooc.bicycle.presenter.Presenter;
 import com.vpooc.bicycle.utils.CircleImageView;
 
@@ -42,19 +43,19 @@ public class MainActivity extends Activity {
         initView();
         initData();
         setListener();
+//
+//        AVOSCloud.initialize(this, "rJqDhpg8TkD65RtmSo0gMdow-gzGzoHsz", "VtlXXWrgs0L1NdgK7Lw0fnju");
+//        LoginModle login = new LoginModle();
+//        login.getSMSCode("18328073673", new ILoginModle.OnMobileCodeCallback() {
+//            @Override
+//            public void onGetSMSCode(AVException e) {
+//                if (e != null) {
+//                    Log.d("", e.toString());
+//                }
+//            }
+//        });
 
-        AVOSCloud.initialize(this, "rJqDhpg8TkD65RtmSo0gMdow-gzGzoHsz", "VtlXXWrgs0L1NdgK7Lw0fnju");
-        LoginModle login = new LoginModle();
-        login.getSMSCode("18328073673", new ILoginModle.OnMobileCodeCallback() {
-            @Override
-            public void onGetSMSCode(AVException e) {
-                if (e != null) {
-                    Log.d("", e.toString());
-                }
-            }
-        });
-
-    }
+}
 
 
     private void initData() {
@@ -90,6 +91,8 @@ public class MainActivity extends Activity {
         // 获取地图控件引用
         mMapView = (MapView) findViewById(R.id.bmapView);
         mMap = mMapView.getMap();
+        Application app= (Application) getApplication();
+        app.setInstanceMap(mMap);
         btnSOUSHUO = (Button) findViewById(R.id.ccx_soushuo_btn);
         etSOUSHUO = (EditText) findViewById(R.id.ccx_soushuo_et);
 

@@ -4,18 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import com.avos.avoscloud.AVGeoPoint;
+import com.avos.avoscloud.AVObject;
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
+import com.vpooc.bicycle.Modle.MapModel;
+import com.vpooc.bicycle.Modle.IMapModel;
 import com.vpooc.bicycle.Modle.bicycleModle.IBicycleModle;
 import com.vpooc.bicycle.Modle.bicycleModle.Impl.BicycleModle;
 import com.vpooc.bicycle.View.IMapView;
+import com.vpooc.bicycle.View.MapView;
 import com.vpooc.bicycle.app.Application;
 import com.vpooc.bicycle.entity.BicycleInfomation;
+import com.vpooc.bicycle.utils.L;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import pl.droidsonroids.gif.GifImageView;
-
+//东方希望：纬度:30.628364,经度:104.048771
 public class Presenter {
 
 	private Context context;
@@ -23,14 +31,18 @@ public class Presenter {
 	private Application app;
 	private Handler handler = new Handler();
 	private IBicycleModle bicycleModle;
+	private MapModel mapModel;
+	private String userID="Tom";
 
 	public Presenter(Context context, IMapView view) {
 		super();
 		this.view = view;
 		this.context = context;
 		app = (Application) context.getApplicationContext();
-		initView();
 		initModle();
+		initView();
+
+
 		// getStateList("sz", "广场");
 
 	}
@@ -39,13 +51,26 @@ public class Presenter {
 
 		bicycleModle = new BicycleModle(context, handler,
 				app.getRrequestQueue());
-
+		mapModel = new MapModel(context, userID);
 	}
-
+int i=0;
 	private void initView() {
 		// TODO Auto-generated method stub
-		System.out.println("");
-		view.setMyLocation();
+
+		System.out.println("开始定位");
+		//定位并传回定位信息
+		view = new MapView(context, Application.getInstanceMap());
+		view.setMyLocation(new IMapView.OnLocationCallback() {
+			@Override
+			public void LocationCallback(final BDLocation location) {
+				//获取附近好友
+			Log.d("开始雷达","回调");
+				if(i%10==0) {
+					mapModel.uploadInfo(new LatLng(location.getLatitude(), location.getLongitude()), "第一次试验");
+				}
+				i++;
+			}
+		});
 	}
 
 	public void buildMaker(List<BicycleInfomation> markers) {

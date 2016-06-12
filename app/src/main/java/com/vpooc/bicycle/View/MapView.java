@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.avos.avoscloud.LogUtil;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -30,6 +31,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.vpooc.bicycle.R;
 import com.vpooc.bicycle.entity.BicycleInfomation;
+import com.vpooc.bicycle.utils.BaiduMapUtil;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -45,43 +47,34 @@ public class MapView implements IMapView {
     private int resIcon = R.drawable.icon_openmap_mark;
 
     private List<BicycleInfomation> markers;
-
+    private OnLocationCallback locationCallback;
     public MapView(Context context, final BaiduMap mMap) {
 
         super();
         System.out.println("MapView implements IMapView");
         this.mMap = mMap;
         this.context = context;
-        this.mMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                mMap.clear();
-            }
-
-            @Override
-            public boolean onMapPoiClick(MapPoi mapPoi) {
-                return false;
-            }
-        });
         this.mMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
 
             @Override
             public void onMapStatusChangeStart(MapStatus arg0) {
                 // TODO Auto-generated method stub
-                mMap.clear();
+
             }
 
             @Override
             public void onMapStatusChangeFinish(MapStatus arg0) {
                 // TODO Auto-generated method stub
                 if (arg0.zoom < 13) {
-                    if (resIcon == R.drawable.icon_openmap_mark && requestStateDetailedData != null) {
+                    if (resIcon == R.drawable.icon_openmap_mark
+                            && requestStateDetailedData != null) {
                         resIcon = R.drawable.icon_mark_pt;
                         mMap.clear();
                         buildMaker(markers, requestStateDetailedData);
                     }
                 } else {
-                    if (resIcon == R.drawable.icon_mark_pt && requestStateDetailedData != null) {
+                    if (resIcon == R.drawable.icon_mark_pt
+                            && requestStateDetailedData != null) {
                         resIcon = R.drawable.icon_openmap_mark;
 
                         mMap.clear();
@@ -89,7 +82,6 @@ public class MapView implements IMapView {
                     }
 
                 }
-
 
             }
 
@@ -114,7 +106,8 @@ public class MapView implements IMapView {
     }
 
     @Override
-    public void setMyLocation() {
+    public void setMyLocation(OnLocationCallback onLocationCallback) {
+        locationCallback=onLocationCallback;
         // 高精度定位模式：这种定位模式下，会同时使用网络定位和GPS定位，优先返回最高精度的定位结果；
         // 低功耗定位模式：这种定位模式下，不会使用GPS，只会使用网络定位（Wi-Fi和基站定位）；
         // 仅用设备定位模式：这种定位模式下，不需要连接网络，只使用GPS进行定位，这种模式下不支持室内环境的定位。
@@ -158,6 +151,7 @@ public class MapView implements IMapView {
         mLocClient.setLocOption(option);
         mLocClient.start();
 
+
     }
 
     @Override
@@ -186,18 +180,22 @@ public class MapView implements IMapView {
             if (location == null || mMap == null) {
                 return;
             }
-            // System.out.println("定位位置经度" + location.getLongitude());
-            // System.out.println("定位位置纬度" + location.getLatitude());
-            MyLocationData locData = new MyLocationData.Builder().accuracy(location.getRadius())
+            Log.d("定位结果","开始回调雷达");
+            locationCallback.LocationCallback(location);
+            MyLocationData locData = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
                     // 此处设置开发者获取到的方向信息，顺时针0-360
-                    .direction(100).latitude(location.getLatitude()).longitude(location.getLongitude()).build();
+                    .direction(100).latitude(location.getLatitude())
+                    .longitude(location.getLongitude()).build();
             mMap.setMyLocationData(locData);
             if (isFirstLoc) {
                 isFirstLoc = false;
-                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng ll = new LatLng(location.getLatitude(),
+                        location.getLongitude());
                 MapStatus.Builder builder = new MapStatus.Builder();
                 builder.target(ll).zoom(18.0f);
-                mMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+                mMap.animateMapStatus(MapStatusUpdateFactory
+                        .newMapStatus(builder.build()));
             }
         }
     }
@@ -206,6 +204,7 @@ public class MapView implements IMapView {
      * Marker监听实现类
      *
      * @author Administrator
+     *
      */
     class MarkerOnClickListener implements OnMarkerClickListener {
 
@@ -216,36 +215,24 @@ public class MapView implements IMapView {
         public boolean onMarkerClick(final Marker marker) {
             // TODO Auto-generated method stub
 
-            // Button button = new Button(context);
-            // button.setBackgroundResource(R.drawable.img03_14);
-            // OnInfoWindowClickListener listener = null;
-            // button.setText("更改位置");
-            // listener = new OnInfoWindowClickListener() {
-            // public void onInfoWindowClick() {
-            // LatLng ll = marker.getPosition();
-            // LatLng llNew = new LatLng(ll.latitude + 0.005,
-            // ll.longitude + 0.005);
-            // marker.setPosition(llNew);
-            // mMap.hideInfoWindow();
-            // }
-            // };
-            // LatLng ll = marker.getPosition();
-            // InfoWindow mInfoWindow = new
-            // InfoWindow(BitmapDescriptorFactory.fromView(button), ll, -47,
-            // listener);
-
             mMap.hideInfoWindow();
 
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
             detailedView = layoutInflater.inflate(R.layout.mark_info, null);
-            BicycleInfomation stateInfo = (BicycleInfomation) marker.getExtraInfo().getSerializable("stateInfo");
+            BicycleInfomation stateInfo = (BicycleInfomation) marker
+                    .getExtraInfo().getSerializable("stateInfo");
 
-            ivGet = (GifImageView) detailedView.findViewById(R.id.mark_state_info_gif_iv_get);
-            ivStop = (GifImageView) detailedView.findViewById(R.id.mark_state_info_gif_iv_stop);
-            ((TextView) detailedView.findViewById(R.id.mark_state_info_name)).append(stateInfo.getState());
-            requestStateDetailedData.requestStateDetailedData(stateInfo, ivGet, ivStop);
-            InfoWindow mInfoWindow = new InfoWindow(detailedView, marker.getPosition(), -70);
+            ivGet = (GifImageView) detailedView
+                    .findViewById(R.id.mark_state_info_gif_iv_get);
+            ivStop = (GifImageView) detailedView
+                    .findViewById(R.id.mark_state_info_gif_iv_stop);
+            ((TextView) detailedView.findViewById(R.id.mark_state_info_name))
+                    .append(stateInfo.getState());
+            requestStateDetailedData.requestStateDetailedData(stateInfo, ivGet,
+                    ivStop);
+            InfoWindow mInfoWindow = new InfoWindow(detailedView,
+                    marker.getPosition(), -70);
 
             mMap.showInfoWindow(mInfoWindow);
 
@@ -255,7 +242,8 @@ public class MapView implements IMapView {
     }
 
     @Override
-    public void buildMaker(List<BicycleInfomation> markers, RequestStateDetailedData requestStateDetailedData) {
+    public void buildMaker(List<BicycleInfomation> markers,
+                           RequestStateDetailedData requestStateDetailedData) {
 
         this.markers = markers;
         this.requestStateDetailedData = requestStateDetailedData;
@@ -269,31 +257,21 @@ public class MapView implements IMapView {
     public void clearMarke() {
         // TODO Auto-generated method stub
         mMap.clear();
+
     }
 
     /**
-     * 创建单个标注Marker 开发者可根据自己实际的业务需求，利用标注覆盖物，在地图指定的位置上添加标注信息
-     *
-     * @param lat 纬度
-     * @param lng 经度
-     * @param bm  显示的图标
+     *            显示的图标
      */
     public void buildMaker(BicycleInfomation marker, int res) {
         // 定义Maker坐标点
-
-        LatLng point = new LatLng(Double.valueOf(marker.getLat()), Double.valueOf(marker.getLng()));
-        // 构建Marker图标
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(resIcon);
-        // 构建MarkerOption，用于在地图上添加Marker
-        MarkerOptions option = new MarkerOptions().position(point);
+        LatLng point = new LatLng(Double.valueOf(marker.getLat()),
+                Double.valueOf(marker.getLng()));
         Bundle bundle = new Bundle();
         bundle.putSerializable("stateInfo", marker);
 
-        option.extraInfo(bundle);
-        option.icon(bitmap);
-
         // 在地图上添加Marker，并显示
-        mMap.addOverlay(option);
+        BaiduMapUtil.buildSingleMaker(bundle,point,res);
     }
 
 }

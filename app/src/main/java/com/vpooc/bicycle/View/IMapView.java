@@ -2,6 +2,7 @@ package com.vpooc.bicycle.View;
 
 import java.util.List;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
 import com.vpooc.bicycle.entity.BicycleInfomation;
 
@@ -32,10 +33,16 @@ public interface IMapView {
 					RequestStateDetailedData requestStateDetailedData);
 
 	/**
-	 * 定位我的地址
+	 * 定位我的地址，并回调传回BDLocation
 	 */
-	void setMyLocation();
+	void setMyLocation(OnLocationCallback onLocationCallback);
 
+	/**
+	 * 定位完成后的回调接口
+	 */
+	interface OnLocationCallback{
+		void LocationCallback(BDLocation location);
+	}
 	/**
 	 * 暂停定位 暂停后需要关闭定位图层
 	 */
