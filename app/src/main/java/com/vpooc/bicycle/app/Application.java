@@ -1,14 +1,19 @@
 package com.vpooc.bicycle.app;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.vpooc.bicycle.Other.AVImClientManager;
 import com.vpooc.bicycle.Other.MessageHandler;
 
 /**
@@ -32,7 +37,12 @@ public class Application extends android.app.Application {
                 "VtlXXWrgs0L1NdgK7Lw0fnju");
         AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class, new MessageHandler(this));
 
-
+        AVImClientManager.getInstance().open("Tom", new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+                Log.d("application", "创建客户端 Tom");
+            }
+        });
         context = getApplicationContext();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
     }

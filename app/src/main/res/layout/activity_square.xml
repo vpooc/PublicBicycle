@@ -7,7 +7,7 @@
     <include layout="@layout/tool_bar"/>
     <fragment
         android:id="@+id/fragment_chat"
-        android:name="com.leancloud.im.guide.fragment.ChatFragment"
+        android:name="com.vpooc.bicycle.ChatFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

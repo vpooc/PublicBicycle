@@ -60,7 +60,7 @@ private String userID;
         public void onGetNearbyInfoList(RadarNearbyResult result, RadarSearchError error) {
 
             if (error == RadarSearchError.RADAR_NO_ERROR) {
-                Log.d( "查询周边成功",result.infoList.toString());
+//                Log.d( "查询周边成功",result.infoList.toString());
                 Toast.makeText(context, "查询周边成功", Toast.LENGTH_LONG).show();
                 // 获取成功
                 listResult = result;

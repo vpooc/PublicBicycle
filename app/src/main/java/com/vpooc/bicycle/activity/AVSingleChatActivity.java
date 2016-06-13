@@ -43,6 +43,7 @@ public class AVSingleChatActivity extends AVBaseActivity {
     protected Toolbar toolbar;
 
     protected ChatFragment chatFragment;
+    String memberId="keke";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +60,8 @@ public class AVSingleChatActivity extends AVBaseActivity {
             }
         });
 
-//    String memberId = getIntent().getStringExtra(Constants.MEMBER_ID);
-//        getConversation
+//        String memberId = getIntent().getExtras().getString("userID");
+        getConversation(memberId);
 
 
     }

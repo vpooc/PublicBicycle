@@ -54,12 +54,24 @@
         </activity>
         <activity android:name="com.vpooc.bicycle.activity.SettingActivity">
         </activity>
-
+        <activity android:name=".activity.AVSingleChatActivity"/>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote">
         </service>
+
+        <service android:name="com.avos.avoscloud.PushService"/>
+
+        <receiver android:name=".Other.NotificationBroadcastReceiver"/>
+
+        <receiver android:name="com.avos.avoscloud.AVBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

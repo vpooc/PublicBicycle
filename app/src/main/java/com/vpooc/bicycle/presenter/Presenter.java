@@ -55,16 +55,13 @@ public class Presenter {
 	}
 int i=0;
 	private void initView() {
-		// TODO Auto-generated method stub
 
-		System.out.println("开始定位");
 		//定位并传回定位信息
 		view = new MapView(context, Application.getInstanceMap());
 		view.setMyLocation(new IMapView.OnLocationCallback() {
 			@Override
 			public void LocationCallback(final BDLocation location) {
 				//获取附近好友
-			Log.d("开始雷达","回调");
 				if(i%10==0) {
 					mapModel.uploadInfo(new LatLng(location.getLatitude(), location.getLongitude()), "第一次试验");
 				}
