@@ -1,125 +1,42 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ffffff"
-                tools:context="com.vpooc.bicycle.activity.MainActivity" >
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true" >
-    </com.baidu.mapapi.map.MapView>
-
-    <RelativeLayout
+    <TabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#55c0c0c0" >
 
-        <com.vpooc.bicycle.utils.CircleImageView
-            android:id="@+id/cir_didi_person"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/icon_avatar_default" />
-
-        <Button
-            android:id="@+id/bt_didi_start"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_centerHorizontal="true"
-            android:background="@null"
-            android:text="开始"
-            android:textColor="#ff0000"
-            android:textSize="15sp" />
-
-        <com.vpooc.bicycle.utils.CircleImageView
-            android:id="@+id/cir_didi_message"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/icon_list_context_menu_set_as_ringtone" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_didi_menu"
-        android:layout_width="120dp"
         android:layout_height="match_parent"
-        android:background="#c8bfe7"
         android:orientation="vertical"
-        android:visibility="invisible" >
 
-        <com.vpooc.bicycle.utils.CircleImageView
-            android:id="@+id/cir_didi_menu_person"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/icon_avatar_default" />
+        android:padding="5dp">
 
-        <RadioGroup
-            android:id="@+id/rg_didi_menu"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/rb_didi_history"
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:button="@null"
-                android:gravity="center_horizontal"
-                android:onClick="doClick"
-                android:text="查询记录"
-                android:textSize="20sp" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
 
-            <RadioButton
-                android:id="@+id/rb_didi_message"
+
+                android:padding="5dp"/>
+
+            <TabWidget
+                android:id="@android:id/tabs"
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:button="@null"
-                android:gravity="center_horizontal"
-                android:onClick="doClick"
-                android:text="消息"
-                android:textSize="20sp" />
+                android:layout_height="40dp"
+                />
+        </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/rb_didi_setting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:button="@null"
-                android:gravity="center_horizontal"
-                android:onClick="doClick"
-                android:text="设置"
-                android:textSize="20sp" />
-        </RadioGroup>
-    </LinearLayout>
+    </TabHost>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="60dp"
-        android:orientation="horizontal" >
-
-        <EditText
-            android:id="@+id/ccx_soushuo_et"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="4"
-            android:hint="请输入搜索地址" />
-
-        <Button
-            android:id="@+id/ccx_soushuo_btn"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="搜索" />
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

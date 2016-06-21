@@ -1,4 +1,4 @@
-package com.vpooc.bicycle.event;
+package com.vpooc.bicycle;
 
 /**
  * Created by wli on 15/8/24.

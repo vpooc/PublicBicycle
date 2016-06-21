@@ -1,4 +1,4 @@
-package com.vpooc.bicycle.Other;
+package com.vpooc.bicycle;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,11 +7,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
-import com.vpooc.bicycle.event.MemberLetterEvent;
-
 import java.util.ArrayList;
 import java.util.List;
+
 import de.greenrobot.event.EventBus;
 
 
@@ -46,6 +44,9 @@ public class LetterView extends LinearLayout {
     removeAllViews();
     for(Character content : letters) {
       TextView view = new TextView(getContext());
+      LayoutParams param = new LayoutParams(
+        LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1.0f);
+      view.setLayoutParams(param);
       view.setText(content.toString());
       addView(view);
     }

@@ -1,13 +1,11 @@
 package com.vpooc.bicycle.Modle;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 
-import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.radar.RadarNearbyInfo;
 import com.baidu.mapapi.radar.RadarNearbyResult;
@@ -17,12 +15,8 @@ import com.baidu.mapapi.radar.RadarSearchListener;
 import com.baidu.mapapi.radar.RadarSearchManager;
 import com.baidu.mapapi.radar.RadarUploadInfo;
 import com.vpooc.bicycle.R;
-import com.vpooc.bicycle.activity.AVSingleChatActivity;
-import com.vpooc.bicycle.activity.MainActivity;
 import com.vpooc.bicycle.utils.BaiduMapUtil;
 import com.vpooc.bicycle.utils.L;
-
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/6/7.

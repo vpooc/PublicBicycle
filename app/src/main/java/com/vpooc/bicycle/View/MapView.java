@@ -2,6 +2,7 @@ package com.vpooc.bicycle.View;
 
 import java.util.List;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.Volley;
 import com.avos.avoscloud.LogUtil;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -31,9 +33,11 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.vpooc.bicycle.R;
-import com.vpooc.bicycle.activity.AVSingleChatActivity;
+
+import com.vpooc.bicycle.app.Application;
 import com.vpooc.bicycle.entity.BicycleInfomation;
 import com.vpooc.bicycle.utils.BaiduMapUtil;
+import com.vpooc.bicycle.utils.Const;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -43,7 +47,7 @@ public class MapView implements IMapView {
     private Context context;
     private LocationClient mLocClient;
     private boolean isFirstLoc = true;
-    private RequestStateDetailedData requestStateDetailedData;
+    private static RequestStateDetailedData requestStateDetailedData;
     public View detailedView;
     // 标注图标，当地图阶级小于14时，显示大图标
     private int resIcon = R.drawable.icon_openmap_mark;
@@ -208,9 +212,10 @@ public class MapView implements IMapView {
         public boolean onMarkerClick(final Marker marker) {
             // TODO Auto-generated method stub
             Bundle bundle = marker.getExtraInfo();
-            if (bundle == null) {
+            if (bundle.getString("userID") == null) {
 
                 mMap.hideInfoWindow();
+                Application.requestQueue.cancelAll(Const.REQUEST_TAG);
 
                 LayoutInflater layoutInflater = LayoutInflater.from(context);
 
@@ -226,10 +231,10 @@ public class MapView implements IMapView {
                 mMap.showInfoWindow(mInfoWindow);
             } else {
 //单击用户标识
-                Intent intent = new Intent(context, AVSingleChatActivity.class);
-                intent.putExtras(bundle);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+//                Intent intent = new Intent(context, AVSingleChatActivity.class);
+//                intent.putExtras(bundle);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                context.startActivity(intent);
             }
 
             return true;

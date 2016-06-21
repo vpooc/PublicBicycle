@@ -2,22 +2,30 @@ package com.vpooc.bicycle.Modle.bicycleModle.Impl;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.vpooc.bicycle.Modle.bicycleModle.AbsBicycleRequst;
 import com.vpooc.bicycle.Modle.bicycleModle.IBicycleModle;
+import com.vpooc.bicycle.R;
+import com.vpooc.bicycle.app.Application;
 import com.vpooc.bicycle.entity.BicycleInfomation;
+import com.vpooc.bicycle.utils.Const;
 import com.vpooc.bicycle.utils.ParserJsonDataUtil;
 
-import org.apache.http.Header;
+//import org.apache.http.Header;
 
 import java.util.List;
 
@@ -27,7 +35,7 @@ import pl.droidsonroids.gif.GifImageView;
  * Created by Administrator on 2016/5/19.
  */
 
- public class BicycleModle implements IBicycleModle {
+public class BicycleModle implements IBicycleModle {
     private Context context;
     private Handler handler;
     private RequestQueue requestQueue;
@@ -35,8 +43,7 @@ import pl.droidsonroids.gif.GifImageView;
     protected List<BicycleInfomation> bicycleInfomation;
     protected Bitmap bm;
 
-    public BicycleModle(Context context, Handler handler,
-                         RequestQueue requestQueue) {
+    public BicycleModle(Context context, Handler handler, RequestQueue requestQueue) {
         super();
         this.context = context;
         this.handler = handler;
@@ -69,8 +76,7 @@ import pl.droidsonroids.gif.GifImageView;
     }
 
     @Override
-    public void getStateList(String district, String state,
-                             StateListCallback stateListCallback) {
+    public void getStateList(String district, String state, StateListCallback stateListCallback) {
         // TODO Auto-generated method stub
         this.stateListCallback = stateListCallback;
         getStateList_(district, state);
@@ -78,28 +84,35 @@ import pl.droidsonroids.gif.GifImageView;
     }
 
     @Override
-    public void getStateDetail(final BicycleInfomation state,
-                               final GifImageView ivGet, final GifImageView ivStop) {
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(state.getStop(), new AsyncHttpResponseHandler() {
+    public void getStateDetail(final BicycleInfomation state, final GifImageView ivGet, final GifImageView ivStop) {
 
+        Request requestGet = new ImageRequest(state.getGet(), new Response.Listener<Bitmap>() {
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
-                System.out.println("加载成功");
-
-
-
+            public void onResponse(Bitmap bitmap) {
+                ivGet.setImageBitmap(bitmap);
             }
-
+        }, 60, 60, Bitmap.Config.RGB_565, new Response.ErrorListener() {
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-                // TODO Auto-generated method stub
-
-                System.out.println("AsyncHttpClient加载失败");
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("请求图片数据出错", "");
             }
         });
+        requestGet.setTag(Const.REQUEST_TAG);
+        Application.requestQueue.add(requestGet);
+
+        Request requestStop = new ImageRequest(state.getGet(), new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap bitmap) {
+                ivGet.setImageBitmap(bitmap);
+            }
+        }, 60, 60, Bitmap.Config.RGB_565, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("请求图片数据出错", "");
+            }
+        });
+        requestStop.setTag(Const.REQUEST_TAG);
+        Application.requestQueue.add(requestStop);
 
     }
 
