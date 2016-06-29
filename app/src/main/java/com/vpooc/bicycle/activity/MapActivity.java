@@ -40,6 +40,7 @@ public class MapActivity extends FragmentActivity {
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_map);
         initView();
+        initData();
         setListener();
 //
 //        AVOSCloud.initialize(this, "rJqDhpg8TkD65RtmSo0gMdow-gzGzoHsz", "VtlXXWrgs0L1NdgK7Lw0fnju");
@@ -76,7 +77,10 @@ public class MapActivity extends FragmentActivity {
     }
 
     private void initData() {
-        presenter = new Presenter(this, new com.vpooc.bicycle.View.MapView(getBaseContext(), mMap));
+
+//        presenter = new Presenter(this, new com.vpooc.bicycle.View.MapView(getBaseContext(), mMap));
+//        presenter = new Presenter(getBaseContext(), new com.vpooc.bicycle.View.MapView(getBaseContext(), mMap));
+        presenter = new Presenter(getApplicationContext(), new com.vpooc.bicycle.View.MapView(getBaseContext(), mMap));
 
     }
 
@@ -188,10 +192,10 @@ public class MapActivity extends FragmentActivity {
     protected void onDestroy() {
         // TODO Auto-generated method stub
 
-
+        mMapView.onDestroy();
         super.onDestroy();
         // 在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-        mMapView.onDestroy();
+
     }
 
     @Override
@@ -203,9 +207,11 @@ public class MapActivity extends FragmentActivity {
 
     @Override
     protected void onPause() {
+
+        mMapView.onPause();
         super.onPause();
         // 在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
-        mMapView.onPause();
+
     }
 
     @Override

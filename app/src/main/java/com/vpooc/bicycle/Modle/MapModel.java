@@ -15,6 +15,7 @@ import com.baidu.mapapi.radar.RadarSearchListener;
 import com.baidu.mapapi.radar.RadarSearchManager;
 import com.baidu.mapapi.radar.RadarUploadInfo;
 import com.vpooc.bicycle.R;
+import com.vpooc.bicycle.app.Application;
 import com.vpooc.bicycle.utils.BaiduMapUtil;
 import com.vpooc.bicycle.utils.L;
 
@@ -49,87 +50,26 @@ private String userID;
 
     }
 
-    class InnerNearbyInfoListener implements RadarSearchListener {
-        @Override
-        public void onGetNearbyInfoList(RadarNearbyResult result, RadarSearchError error) {
-
-            if (error == RadarSearchError.RADAR_NO_ERROR) {
-//                Log.d( "查询周边成功",result.infoList.toString());
-                Toast.makeText(context, "查询周边成功", Toast.LENGTH_LONG).show();
-                // 获取成功
-                listResult = result;
-                // 当前页码
-                curPage = result.pageIndex;
-                // 总页数
-                totalPage = result.pageNum;
-                // 结果总数
-                // totalNum=result.totalNum;
-                // 处理数据
-                parseResultToMap(listResult);
-
-            } else {
-                // 获取失败
-                Log.d( "获取失败","");
-                curPage = 0;
-                totalPage = 0;
-                Toast.makeText(context, "查询周边失败", Toast.LENGTH_LONG).show();
-            }
-        }
-
-        @Override
-        public void onGetUploadState(RadarSearchError error) {
-
-            if (error == RadarSearchError.RADAR_NO_ERROR) {
-                // 上传成功
-               Log.d( "单次上传位置成功","");
-                    Toast.makeText(context, "单次上传位置成功", Toast.LENGTH_LONG)
-                            .show();
-searchNearby(pt);
-
-            } else {
-                // 上传失败
-                Log.d( "单次上传位置失败","");
-                    Toast.makeText(context, "单次上传位置失败", Toast.LENGTH_LONG)
-                            .show();
-            }
-        }
-
-        @Override
-        public void onGetClearInfoState(RadarSearchError error) {
-            if (error == RadarSearchError.RADAR_NO_ERROR) {
-                // 清除成功
-                L.d( "清除位置成功");
-                Toast.makeText(context, "清除位置成功", Toast.LENGTH_LONG).show();
-            } else {
-                // 清除失败
-                L.d( "清除位置失败");
-                Toast.makeText(context, "清除位置失败", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
 
     /**
      * 上传一次位置
      * @param pt 地址坐标
-     * @param userComment
      */
 
-    int i=0;
-    public void uploadInfo(LatLng pt,String userComment) {
-        i++;
+//    int i=0;
+    public void uploadInfo(LatLng pt) {
+//        i++;
         if (pt == null) {
             Toast.makeText(context, "未获取到位置", Toast.LENGTH_LONG).show();
             return;
         }
         this.pt=pt;
         RadarUploadInfo info = new RadarUploadInfo();
-        info.comments = userComment;
+        info.comments = Application.getClientUser().getUrlClientImage();
         info.pt = pt;
 
-        RadarSearchManager.getInstance().setUserID(userID+i);
-
-
+        RadarSearchManager.getInstance().setUserID(userID);
         RadarSearchManager.getInstance().uploadInfoRequest(info);
     }
 
@@ -173,18 +113,6 @@ searchNearby(pt);
     public void parseResultToMap(RadarNearbyResult res) {
         if (res != null && res.infoList != null && res.infoList.size() > 0) {
             for (RadarNearbyInfo info:res.infoList) {
-//                MarkerOptions option = new MarkerOptions().icon(ff3).position(
-//                        res.infoList.get(i).pt);
-//                Bundle des = new Bundle();
-//                if (res.infoList.get(i).comments == null
-//                        || res.infoList.get(i).comments.equals("")) {
-//                    des.putString("des", "没有备注");
-//                } else {
-//                    des.putString("des", res.infoList.get(i).comments);
-//                }
-//
-//                option.extraInfo(des);
-//                mBaiduMap.addOverlay(option);
 
                 Bundle bundle = new Bundle();
                 bundle.putString("userID",info.userID);
@@ -195,4 +123,65 @@ searchNearby(pt);
 
 
     }
+
+
+    class InnerNearbyInfoListener implements RadarSearchListener {
+        @Override
+        public void onGetNearbyInfoList(RadarNearbyResult result, RadarSearchError error) {
+
+            if (error == RadarSearchError.RADAR_NO_ERROR) {
+//                Log.d( "查询周边成功",result.infoList.toString());
+                Toast.makeText(context, "查询周边成功", Toast.LENGTH_LONG).show();
+                // 获取成功
+                listResult = result;
+                // 当前页码
+                curPage = result.pageIndex;
+                // 总页数
+                totalPage = result.pageNum;
+                // 结果总数
+                // totalNum=result.totalNum;
+                // 处理数据
+                parseResultToMap(listResult);
+
+            } else {
+                // 获取失败
+                Log.d( "获取失败","");
+                curPage = 0;
+                totalPage = 0;
+                Toast.makeText(context, "查询周边失败", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void onGetUploadState(RadarSearchError error) {
+
+            if (error == RadarSearchError.RADAR_NO_ERROR) {
+                // 上传成功
+                Log.d( "单次上传位置成功","");
+                Toast.makeText(context, "单次上传位置成功", Toast.LENGTH_LONG)
+                        .show();
+                searchNearby(pt);
+
+            } else {
+                // 上传失败
+                Log.d( "单次上传位置失败","");
+                Toast.makeText(context, "单次上传位置失败", Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+
+        @Override
+        public void onGetClearInfoState(RadarSearchError error) {
+            if (error == RadarSearchError.RADAR_NO_ERROR) {
+                // 清除成功
+                L.d( "清除位置成功");
+                Toast.makeText(context, "清除位置成功", Toast.LENGTH_LONG).show();
+            } else {
+                // 清除失败
+                L.d( "清除位置失败");
+                Toast.makeText(context, "清除位置失败", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 }

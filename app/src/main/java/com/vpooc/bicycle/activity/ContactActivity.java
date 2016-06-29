@@ -33,9 +33,9 @@ import cn.leancloud.chatkit.utils.LCIMConstants;
 
 public class ContactActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+
     private ViewPager viewPager;
-//    private TabLayout tabLayout;
+    private TabLayout tabLayout;
 
     /**
      * 上一次点击 back 键的时间
@@ -52,11 +52,9 @@ public class ContactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         viewPager = (ViewPager)findViewById(R.id.pager);
-//        tabLayout = (TabLayout)findViewById(R.id.tablayout);
+        tabLayout = (TabLayout)findViewById(R.id.tablayout);
         setTitle(R.string.app_name);
-        setSupportActionBar(toolbar);
         initTabLayout();
     }
 
@@ -77,51 +75,50 @@ public class ContactActivity extends AppCompatActivity {
 
     private void initTabLayout() {
         String[] tabList = new String[]{"会话", "联系人"};
-//        final Fragment[] fragmentList = new Fragment[] {new LCIMConversationListFragment(),
-//                new ContactFragment()};
-      final   List<Fragment> fragmentList=new ArrayList<>();
-        fragmentList.add(new LCIMConversationListFragment());
-        fragmentList.add(new ContactFragment());
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return fragmentList.get(position);
-            }
-
-            @Override
-            public int getCount() {
-                return fragmentList.size();
-            }
-        });
-
-
-
-//        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-//        for (int i = 0; i < tabList.length; i++) {
-//            tabLayout.addTab(tabLayout.newTab().setText(tabList[i]));
-//        }
-//
-//        TabFragmentAdapter adapter = new TabFragmentAdapter(getSupportFragmentManager(),
-//                Arrays.asList(fragmentList), Arrays.asList(tabList));
-//        viewPager.setAdapter(adapter);
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//      final   List<Fragment> fragmentList=new ArrayList<>();
+//        fragmentList.add(new LCIMConversationListFragment());
+//        fragmentList.add(new ContactFragment());
+//        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 //            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            public Fragment getItem(int position) {
+//                return fragmentList.get(position);
 //            }
 //
 //            @Override
-//            public void onPageSelected(int position) {
-//                if (0 == position) {
-////          EventBus.getDefault().post(new ConversationFragmentUpdateEvent());
-//                }
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
+//            public int getCount() {
+//                return fragmentList.size();
 //            }
 //        });
-//        tabLayout.setupWithViewPager(viewPager);
-//        tabLayout.setTabsFromPagerAdapter(adapter);
+
+
+        final Fragment[] fragmentList = new Fragment[] {new LCIMConversationListFragment(),
+                new ContactFragment()};
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        for (int i = 0; i < tabList.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(tabList[i]));
+        }
+
+        TabFragmentAdapter adapter = new TabFragmentAdapter(getSupportFragmentManager(),
+                Arrays.asList(fragmentList), Arrays.asList(tabList));
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (0 == position) {
+//          EventBus.getDefault().post(new ConversationFragmentUpdateEvent());
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabsFromPagerAdapter(adapter);
     }
 
     @Override

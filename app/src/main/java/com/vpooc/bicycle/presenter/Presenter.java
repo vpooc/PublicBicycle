@@ -61,9 +61,10 @@ int i=0;
 		view.setMyLocation(new IMapView.OnLocationCallback() {
 			@Override
 			public void LocationCallback(final BDLocation location) {
-				//获取附近好友
-				if(i%10==0) {
-					mapModel.uploadInfo(new LatLng(location.getLatitude(), location.getLongitude()), "第一次试验");
+				//上传客户端的用户信息
+				//包含用户的坐标(头像地址)
+				if(i%3==0) {
+					mapModel.uploadInfo(new LatLng(location.getLatitude(), location.getLongitude()));
 				}
 				i++;
 			}

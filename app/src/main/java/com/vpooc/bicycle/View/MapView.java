@@ -4,34 +4,26 @@ import java.util.List;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.Volley;
-import com.avos.avoscloud.LogUtil;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.location.LocationClientOption.LocationMode;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
-import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.vpooc.bicycle.FriendManager;
 import com.vpooc.bicycle.R;
 
 import com.vpooc.bicycle.app.Application;
@@ -152,8 +144,6 @@ public class MapView implements IMapView {
         option.setScanSpan(2000);
         mLocClient.setLocOption(option);
         mLocClient.start();
-
-
     }
 
     @Override
@@ -171,6 +161,9 @@ public class MapView implements IMapView {
         mMap.setMyLocationEnabled(false);
     }
 
+
+
+
     /**
      * 定位SDK监听函数
      */
@@ -178,6 +171,7 @@ public class MapView implements IMapView {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
+            Log.d("MyLocationListenner", "定位监听");
             // map view 销毁后不在处理新接收的位置
             if (location == null || mMap == null) {
                 return;
@@ -211,15 +205,13 @@ public class MapView implements IMapView {
         @Override
         public boolean onMarkerClick(final Marker marker) {
             // TODO Auto-generated method stub
-            Bundle bundle = marker.getExtraInfo();
+            final Bundle bundle = marker.getExtraInfo();
+            mMap.hideInfoWindow();
             if (bundle.getString("userID") == null) {
-
-                mMap.hideInfoWindow();
                 Application.requestQueue.cancelAll(Const.REQUEST_TAG);
 
                 LayoutInflater layoutInflater = LayoutInflater.from(context);
-
-                detailedView = layoutInflater.inflate(R.layout.mark_info, null);
+                detailedView = layoutInflater.inflate(R.layout.info_window_marker_state, null);
                 BicycleInfomation stateInfo = (BicycleInfomation) marker.getExtraInfo().getSerializable("stateInfo");
 
                 ivGet = (GifImageView) detailedView.findViewById(R.id.mark_state_info_gif_iv_get);
@@ -231,10 +223,29 @@ public class MapView implements IMapView {
                 mMap.showInfoWindow(mInfoWindow);
             } else {
 //单击用户标识
-//                Intent intent = new Intent(context, AVSingleChatActivity.class);
-//                intent.putExtras(bundle);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                context.startActivity(intent);
+                if (bundle.getString("userID") != null) {
+
+                    LayoutInflater layoutInflater = LayoutInflater.from(context);
+                    View addFriendView = layoutInflater.inflate(R.layout.info_window_marker_user, null);
+                    ((TextView) addFriendView.findViewById(R.id.mark_state_info_name)).setText(bundle.getString("userID")+"");
+                    ((Button)addFriendView.findViewById(R.id.info_window_marker_user_btn_cancle)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mMap.hideInfoWindow();
+                        }
+                    });
+
+                    ((Button)addFriendView.findViewById(R.id.info_window_marker_user_btn_ok)).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FriendManager.newInstance().addFriendForUser(bundle.getString("userID"));
+
+                        }
+                    });
+
+                    InfoWindow mInfoWindow = new InfoWindow(detailedView, marker.getPosition(), -70);
+                    mMap.showInfoWindow(mInfoWindow);
+                }
             }
 
             return true;
