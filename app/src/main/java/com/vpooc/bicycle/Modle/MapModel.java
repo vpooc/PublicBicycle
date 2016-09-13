@@ -17,14 +17,13 @@ import com.baidu.mapapi.radar.RadarUploadInfo;
 import com.vpooc.bicycle.R;
 import com.vpooc.bicycle.app.Application;
 import com.vpooc.bicycle.utils.BaiduMapUtil;
-import com.vpooc.bicycle.utils.L;
 
 /**
  * Created by Administrator on 2016/6/7.
  */
 public class MapModel {
     private Context context;
-private String userID;
+//private String userID;
     private int pageIndex;
     private int curPage;
     private int totalPage;
@@ -34,9 +33,8 @@ private String userID;
 
 
 
-    public MapModel(Context context, String userID) {
+    public MapModel(Context context) {
         this.context=context;
-       this.userID =userID;
        initRadar();
     }
 
@@ -46,7 +44,7 @@ private String userID;
         innerNearbyInfoListener=new InnerNearbyInfoListener();
         RadarSearchManager.getInstance().addNearbyInfoListener(innerNearbyInfoListener);
 // 周边雷达设置用户，id为空默认是设备标识
-        RadarSearchManager.getInstance().setUserID(userID);
+        RadarSearchManager.getInstance().setUserID(Application.mClient.getClientID());
 
     }
 
@@ -68,8 +66,8 @@ private String userID;
         RadarUploadInfo info = new RadarUploadInfo();
         info.comments = Application.getClientUser().getUrlClientImage();
         info.pt = pt;
-
-        RadarSearchManager.getInstance().setUserID(userID);
+//        Toast.makeText(context, "USERid"+Application.mClient.getClientID(), Toast.LENGTH_LONG).show();
+        RadarSearchManager.getInstance().setUserID(Application.mClient.getClientID());
         RadarSearchManager.getInstance().uploadInfoRequest(info);
     }
 
@@ -116,7 +114,7 @@ private String userID;
 
                 Bundle bundle = new Bundle();
                 bundle.putString("userID",info.userID);
-                BaiduMapUtil.buildSingleMaker(bundle,info.pt, R.drawable.ic_launcher);
+                BaiduMapUtil.buildSingleMaker(bundle,info.pt, R.mipmap.bike4);
 
             }
         }
@@ -130,8 +128,8 @@ private String userID;
         public void onGetNearbyInfoList(RadarNearbyResult result, RadarSearchError error) {
 
             if (error == RadarSearchError.RADAR_NO_ERROR) {
-//                Log.d( "查询周边成功",result.infoList.toString());
-                Toast.makeText(context, "查询周边成功", Toast.LENGTH_LONG).show();
+                Log.d( "查询周边成功",result.infoList.size()+result.infoList.get(0).userID);
+//                Toast.makeText(context, "查询周边成功", Toast.LENGTH_LONG).show();
                 // 获取成功
                 listResult = result;
                 // 当前页码
@@ -158,15 +156,10 @@ private String userID;
             if (error == RadarSearchError.RADAR_NO_ERROR) {
                 // 上传成功
                 Log.d( "单次上传位置成功","");
-                Toast.makeText(context, "单次上传位置成功", Toast.LENGTH_LONG)
-                        .show();
                 searchNearby(pt);
 
             } else {
-                // 上传失败
                 Log.d( "单次上传位置失败","");
-                Toast.makeText(context, "单次上传位置失败", Toast.LENGTH_LONG)
-                        .show();
             }
         }
 
@@ -174,11 +167,9 @@ private String userID;
         public void onGetClearInfoState(RadarSearchError error) {
             if (error == RadarSearchError.RADAR_NO_ERROR) {
                 // 清除成功
-                L.d( "清除位置成功");
                 Toast.makeText(context, "清除位置成功", Toast.LENGTH_LONG).show();
             } else {
                 // 清除失败
-                L.d( "清除位置失败");
                 Toast.makeText(context, "清除位置失败", Toast.LENGTH_LONG).show();
             }
         }

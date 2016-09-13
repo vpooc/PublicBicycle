@@ -9,7 +9,7 @@ public class URLUtil {
 	/**
 	 * 自行车的key
 	 */
-	public static String key = "1f63c1e4d89a255e081239874908c25a";
+	public static String key = "c2337a80ceb6ed922cb6940b063824c1";
 
 	/**
 	 * 

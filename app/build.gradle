@@ -51,8 +51,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //使用6.0时V7:22.2.0改为V7:23.3.0
     compile project(':chatkit')
-    compile project(':core')
-    compile project(':commons')
+//    compile project(':core')
+//    compile project(':commons')
     compile 'com.android.support:design:23.+'
     compile 'com.android.support:appcompat-v7:23.2.0'
 //    compile 'cn.leancloud.android:avoscloud-sdk:v3.13.+'

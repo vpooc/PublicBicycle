@@ -1,1 +1,2 @@
-include ':app',':chatkit', ':core', ':commons'
+include ':app',':chatkit'
+

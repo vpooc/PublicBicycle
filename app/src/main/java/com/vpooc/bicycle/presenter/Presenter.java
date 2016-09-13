@@ -4,23 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import com.avos.avoscloud.AVGeoPoint;
-import com.avos.avoscloud.AVObject;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
 import com.vpooc.bicycle.Modle.MapModel;
-import com.vpooc.bicycle.Modle.IMapModel;
 import com.vpooc.bicycle.Modle.bicycleModle.IBicycleModle;
 import com.vpooc.bicycle.Modle.bicycleModle.Impl.BicycleModle;
 import com.vpooc.bicycle.View.IMapView;
 import com.vpooc.bicycle.View.MapView;
 import com.vpooc.bicycle.app.Application;
 import com.vpooc.bicycle.entity.BicycleInfomation;
-import com.vpooc.bicycle.utils.L;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import pl.droidsonroids.gif.GifImageView;
 //东方希望：纬度:30.628364,经度:104.048771
@@ -32,7 +27,7 @@ public class Presenter {
 	private Handler handler = new Handler();
 	private IBicycleModle bicycleModle;
 	private MapModel mapModel;
-	private String userID="Tom";
+//	private String userID="Tom";
 
 	public Presenter(Context context, IMapView view) {
 		super();
@@ -51,7 +46,7 @@ public class Presenter {
 
 		bicycleModle = new BicycleModle(context, handler,
 				app.getRrequestQueue());
-		mapModel = new MapModel(context, userID);
+		mapModel = new MapModel(context);
 	}
 int i=0;
 	private void initView() {
@@ -63,7 +58,7 @@ int i=0;
 			public void LocationCallback(final BDLocation location) {
 				//上传客户端的用户信息
 				//包含用户的坐标(头像地址)
-				if(i%3==0) {
+				if(i%10==0) {
 					mapModel.uploadInfo(new LatLng(location.getLatitude(), location.getLongitude()));
 				}
 				i++;

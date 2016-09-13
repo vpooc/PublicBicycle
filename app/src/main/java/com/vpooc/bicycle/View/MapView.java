@@ -171,7 +171,6 @@ public class MapView implements IMapView {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
-            Log.d("MyLocationListenner", "定位监听");
             // map view 销毁后不在处理新接收的位置
             if (location == null || mMap == null) {
                 return;
@@ -227,7 +226,7 @@ public class MapView implements IMapView {
 
                     LayoutInflater layoutInflater = LayoutInflater.from(context);
                     View addFriendView = layoutInflater.inflate(R.layout.info_window_marker_user, null);
-                    ((TextView) addFriendView.findViewById(R.id.mark_state_info_name)).setText(bundle.getString("userID")+"");
+//                    ((TextView) addFriendView.findViewById(R.id.mark_state_info_name)).setText(bundle.getString("userID")+"");
                     ((Button)addFriendView.findViewById(R.id.info_window_marker_user_btn_cancle)).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

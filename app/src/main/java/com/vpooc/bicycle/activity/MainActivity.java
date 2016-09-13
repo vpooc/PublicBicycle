@@ -2,14 +2,10 @@ package com.vpooc.bicycle.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.TabHost;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+
 import com.vpooc.bicycle.R;
-import com.vpooc.bicycle.utils.LoginDialogUtil;
 
 /**
  * Created by Administrator on 2016/6/20.
@@ -26,7 +22,6 @@ public class MainActivity extends android.app.TabActivity{
         setContentView(R.layout.activity_main);
         prepareIntent();
         setupIntent();
-        LoginDialogUtil.showLoginDialog(this);
 
     }
 
@@ -40,7 +35,7 @@ public class MainActivity extends android.app.TabActivity{
     {
         this.mTabHost = getTabHost();
         TabHost localTabHost = this.mTabHost;
-        localTabHost.addTab(buildTabSpec("tab_tag_main",null, R.drawable.icon_mark_pt , this.mMainIntent));
+        localTabHost.addTab(buildTabSpec("tab_tag_main",null, R.drawable.icon_openmap_mark , this.mMainIntent));
         localTabHost.addTab(buildTabSpec("tab_tag_contact", null,R.drawable.btn_square_members, this.mContactIntent));
 
         this.mTabHost.setCurrentTabByTag("tab_tag_main");

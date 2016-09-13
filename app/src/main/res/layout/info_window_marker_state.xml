@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mark_state_info_name"
-        android:text="可借车辆：2" />
+        android:text="可借车辆:" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/mark_state_info_gif_iv_get"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mark_state_info_get"
-        android:text="可停车位:15" />
+        android:text="可停车位:" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/mark_state_info_gif_iv_stop"

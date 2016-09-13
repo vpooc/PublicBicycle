@@ -18,7 +18,9 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.vpooc.bicycle.ContactFragment;
 import com.vpooc.bicycle.CustomUserProvider;
+import com.vpooc.bicycle.Dao.FriendDao;
 import com.vpooc.bicycle.R;
+import com.vpooc.bicycle.app.Application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,10 +54,13 @@ public class ContactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
+        FriendDao.getInstance(Application.getContext());
+
         viewPager = (ViewPager)findViewById(R.id.pager);
         tabLayout = (TabLayout)findViewById(R.id.tablayout);
         setTitle(R.string.app_name);
         initTabLayout();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     @Override
@@ -71,6 +76,12 @@ public class ContactActivity extends AppCompatActivity {
             gotoSquareConversation();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     private void initTabLayout() {
